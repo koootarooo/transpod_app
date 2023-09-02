@@ -9,7 +9,7 @@ file_translation_bp = Blueprint('file_translation', __name__, url_prefix='/api/p
 class FileTranslation(Resource):
     def get(self):
         msg = Message('Test Mail', recipients=['iikotaro3@yahoo.co.jp'])
-        msg.body = "SECRET KEY was loaded successfully."
+        msg.body = "SECRET KEY was loaded successfully again."
         mail.send(msg)
         return 'sent'
 

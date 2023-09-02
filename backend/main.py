@@ -10,11 +10,11 @@ app.register_blueprint(file_translation_bp)
 # メール設定
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'iinemasuzawa@gmail.com'
+app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_ADDRESS')
 app.config['MAIL_PASSWORD'] = os.environ.get('APP_PASSWORD')
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = 'iinemasuzawa@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('GMAIL_ADDRESS')
 
 mail.init_app(app)
 
