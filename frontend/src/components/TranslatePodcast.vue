@@ -1,48 +1,51 @@
 <template>
   <div class="translate">
     <div class="msg">
-      <h1>Turn your podcast into your language.</h1>
+      <h1>海外podcastを日本語で聞こう。</h1>
     </div>
     <div class="drop_zone" @dragenter="dragEnter" @dragleave="dragLeave" @dragover.prevent @drop.prevent="dropFile" :class="{enter: isEnter}" v-if="!isLoading">
       <img src="../assets/upload_img_lightblue.png" width="60" height="60">
-      <span class="main_message">Drag & drop your podcast data</span><br>
+      <span class="main_message">ここにデータをドラッグ&ドロップしてください</span><br>
       <span class="available_format">.mp3 .mpeg only</span>
     </div>
     <div class="preview_zone">
       <p>{{file_title}}</p>
       <p>{{file_size}}</p>
     </div>
-    <button class="translate_btn" @click="openModal()" v-if="!isLoading" v-bind:disabled="!isFile">translate</button>
+    <button class="translate_btn" @click="openModal()" v-if="!isLoading" v-bind:disabled="!isFile">翻訳する</button>
     <div class="loading_contents" v-if="isLoading">
       <div class="loading_message">
-        Now translating...<br>
-        We'll send you email when tlanslating is done.<br>
-        This may take a few minutes.
+        翻訳中...<br>
+        翻訳が完了したらメールでお知らせします。<br>
+        翻訳は数分かかることもあります。
       </div>
       <div class="fulfilling-bouncing-circle-spinner">
         <div class="circle"></div>
         <div class="orbit"></div>
       </div>
       <div class="translate_more" @click="reset()">
-        <span class="translate_again_btn">translate another file</span>
+        <span class="translate_again_btn">他のファイルを翻訳する</span>
       </div>
     </div>
     <div class="overlay" v-if="showModal">
       <div class="overlay_contents">
         <button class="closeButton" @click="closeModal()">close×</button>
-        <p>Enter your email,<br>so that we'll send you the translated file.</p>
+        <p>メールアドレスを入力してください。<br>翻訳が完了したらメールでお知らせします。</p>
         <input type="text" class="emailForm" v-model="userEmail" />
-        <button class="translate_btn" @click="closeModal(); translate()" v-bind:disabled="!rightEmail">translate</button>
+        <button class="translate_btn" @click="closeModal(); translate()" v-bind:disabled="!rightEmail">翻訳する</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'TranslatePodcast',
   data() {
     return {
+      file_data: "",
       file_title: "",
       file_size: "",
       isEnter: false,
@@ -67,6 +70,9 @@ export default {
     },
     dropFile() {
       const file = event.dataTransfer.files[0]
+      const formData = new FormData()
+      formData.append('file',file)
+      this.file_data = formData
       this.file_title = file.name
       const fs = file.size/1024/1024
       this.file_size = fs.toFixed(1) + "MB"
@@ -75,8 +81,20 @@ export default {
     },
     translate() {
       this.isLoading = true
+      // var data = this.file_data
+
+      axios.get('http://127.0.0.1:5000/api/post').then(response => {console.log(response.data)})
+      // axios
+      //   .post('http://127.0.0.1:5000/api/post', data)
+      //   .then(response => {
+      //     console.log(response.data)
+      //   })
+      //   .catch(err => {
+      //     alert(err)
+      //   })
     },
     reset() {
+      this.file_data = ""
       this.file_title = ""
       this.file_size = ""
       this.isLoading = false
@@ -137,7 +155,7 @@ export default {
 	width: 200px;
 	margin: auto;
 	padding: 1rem 4rem;
-  font-size: 20px;
+  font-size: 16px;
 	font-weight: bold;  
 	border: 2px solid #27acd9;
 	background: #27acd9;

@@ -4,16 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
 flask-restful = "*"
-flask-mail = "*"
-python-dotenv = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.11"
-python_full_version = "3.11.1"
-
-[scripts]
-start = "python main.py"
