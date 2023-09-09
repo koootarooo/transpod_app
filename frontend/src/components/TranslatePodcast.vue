@@ -81,17 +81,17 @@ export default {
     },
     translate() {
       this.isLoading = true
-      // var data = this.file_data
+      var data = this.file_data
 
-      axios.get('http://127.0.0.1:5000/api/post').then(response => {console.log(response.data)})
-      // axios
-      //   .post('http://127.0.0.1:5000/api/post', data)
-      //   .then(response => {
-      //     console.log(response.data)
-      //   })
-      //   .catch(err => {
-      //     alert(err)
-      //   })
+      // axios.get('http://127.0.0.1:5000/api/post').then(response => {console.log(response.data)})
+      axios
+        .post('http://127.0.0.1:5000/api/post', data)
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(err => {
+          alert(err)
+        })
     },
     reset() {
       this.file_data = ""

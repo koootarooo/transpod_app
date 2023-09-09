@@ -8,6 +8,13 @@ flask = "*"
 flask-restful = "*"
 flask-mail = "*"
 python-dotenv = "*"
+openai = "*"
+faster-whisper = "*"
+transformers = "*"
+sentencepiece = "*"
+pysbd = "*"
+gtts = "*"
+boto3 = "*"
 
 [dev-packages]
 
