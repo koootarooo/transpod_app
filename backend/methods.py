@@ -94,6 +94,16 @@ def save_s3(file,file_name):
     Filepath = file.name
     Key = f'translated/{file_name}'
     bucket.upload_file(Filepath, Key)
+
+def download():
+    s3 = boto3.resource('s3', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'), aws_secret_access_key=os.environ.get('AWS_SECRET_KEY'))
+    response = s3.meta.client.get_object(Bucket="transpod", Key="musk_news.mp3")
+    data= response['Body'].read()
+    print('data')
+    # downloaded_file = bucket.download_file('test/test.mp3', 'test.mp3')
+    # print("download")
+    # print(downloaded_file)
+    return 'done'
     
 
 

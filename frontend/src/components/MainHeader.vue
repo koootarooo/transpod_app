@@ -3,7 +3,7 @@
         <a href="">
             <img src="../assets/transpod_logo_lightblue.png" height="40" width="104" alt="transpod">
         </a>
-        <!-- <span>transpod</span> -->
+        <router-link class="mypage_link" to="/mypage">マイページ</router-link>
     </header>
 </template>
 
@@ -20,6 +20,9 @@ export default {
     justify-content: flex-start;
     /* border-bottom: solid 1px;
     border-bottom-color: rgb(219, 218, 218); */
+}
+.mypage_link {
+    margin: 0 0 0 auto;
 }
 span {
     font-weight: bold;

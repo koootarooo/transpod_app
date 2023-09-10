@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <MainHeader/>
-    <TranslatePodcast/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import MainHeader from './components/MainHeader.vue'
-import TranslatePodcast from './components/TranslatePodcast.vue'
+// import TranslatePodcast from './components/TranslatePodcast.vue'
 
 export default {
   name: 'App',
   components: {
-    TranslatePodcast,
+    // TranslatePodcast,
     MainHeader
   }
 }

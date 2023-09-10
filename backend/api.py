@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request, session
 from flask_restful import Api, Resource
 from flask_mail import Message
 from methods import mail
-from methods import translate, save_s3
+from methods import translate, save_s3, download
 import json
 
 # ファイルを受け取って翻訳して返す機能のテスト
@@ -19,17 +19,16 @@ class FileTranslation(Resource):
 
     def post(self):
         # 翻訳
-        input_data = request.files['file']
-        mimetype = input_data.content_type
-        fp = tempfile.NamedTemporaryFile(suffix=".mp3")
-        file_name = input_data.filename
-        file_contents = input_data.read()
-        fp.write(file_contents)
+        # input_data = request.files['file']
+        # mimetype = input_data.content_type
+        # fp = tempfile.NamedTemporaryFile(suffix=".mp3")
+        # file_name = input_data.filename
+        # file_contents = input_data.read()
+        # fp.write(file_contents)
         # translated_text = translate(fp)
-        # print(translated_text)
+        # save_s3(fp,file_name)
 
-        save_s3(fp,file_name)
-
+        # downloaded_file = download()
         # メール
         # file_content_type = input_data.content_type
         # msg = Message('Test Mail', recipients=['iikotaro3@yahoo.co.jp'])
