@@ -1,8 +1,10 @@
+import tempfile
 from flask import Flask
 from flask_mail import Mail
 from dotenv import load_dotenv
 import os
 from faster_whisper import WhisperModel
+from flask_mail import Message
 import openai
 import pysbd
 from gtts import gTTS
@@ -74,9 +76,9 @@ def translate_loop(sentenced_text, transcript, MAX_COUNT):
 def text_to_speech(translated_text):
     message = translated_text
     print(message)
-    tts = gTTS(message, lang='ja')
-    return tts
-
+    fp = tempfile.NamedTemporaryFile(suffix=".mp3")
+    gTTS(message, lang='ja').write_to_fp(fp)
+    return fp
 
 def translate(file):  
     MAX_COUNT = 3000
@@ -84,9 +86,7 @@ def translate(file):
     sentenced_text = sentence_segmentation(transcript)
     translated_text = translate_loop(sentenced_text, transcript, MAX_COUNT)
     speech_file = text_to_speech(translated_text)
-    ## ここにS3に保存する処理を入れる
-    ## 保存された後のURLをフロントエンドに返す
-    return translated_text
+    return speech_file
 
 def save_s3(file,file_name):
     s3 = boto3.resource('s3', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'), aws_secret_access_key=os.environ.get('AWS_SECRET_KEY'))
@@ -94,6 +94,7 @@ def save_s3(file,file_name):
     Filepath = file.name
     Key = f'translated/{file_name}'
     bucket.upload_file(Filepath, Key)
+
 
 def download():
     s3 = boto3.resource('s3', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'), aws_secret_access_key=os.environ.get('AWS_SECRET_KEY'))
@@ -105,6 +106,11 @@ def download():
     # print(downloaded_file)
     return 'done'
     
+def send_mail():        
+    msg = Message('Test Mail', recipients=['iikotaro3@yahoo.co.jp'])
+    msg.body = "SECRET KEY was loaded successfully"
+    mail.send(msg)
+    return 'sent'
 
 
 # def gpt():

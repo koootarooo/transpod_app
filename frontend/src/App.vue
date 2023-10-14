@@ -7,12 +7,10 @@
 
 <script>
 import MainHeader from './components/MainHeader.vue'
-// import TranslatePodcast from './components/TranslatePodcast.vue'
 
 export default {
   name: 'App',
   components: {
-    // TranslatePodcast,
     MainHeader
   }
 }

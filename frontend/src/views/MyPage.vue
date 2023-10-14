@@ -15,40 +15,73 @@
                 </td>
             </tr>
         </table>
-        <!-- <div v-for="file in mp3" :key="file">
-            <audio controls>
-                <source :src="mp3">
-            </audio> -->
-        <!-- </div> -->
     </div>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
+import mixins from '../assets/mixins'
+import { useMessageStore } from '../stores/message'
 
 export default {
     name: 'MyPage',
+    mixins: [mixins],
     data(){
         return{
             mp3 : []
         }
     },
+    setup() {
+        const store = useMessageStore()
+
+        return {
+            store
+        }
+    },
     mounted: function(){
-        const mp3 = [
-            {
-                id: 1,
-                file_name: "msuk_test.mp3",
-                url: "https://transpod.s3.ap-northeast-1.amazonaws.com/musk_news.mp3"
-            },
-            {
-                id: 2,
-                file_name: "test_mark_zuckerberg.mp3",
-                url: "https://transpod.s3.ap-northeast-1.amazonaws.com/test_mark_zuckerberg.mp3"   
-            }
-        ]
-        this.mp3 = mp3
+        this.get_myfile()
     },
     methods: {
+        get_myfile() {
+            console.log('get_myfile loaded')
+            const access_token = localStorage.getItem("access_token")
+            const options = {headers:{"Authorization":`Bearer ${access_token}`}}
+
+            axios
+                .get('http://127.0.0.1:5000/file', options)
+                .then(response => {
+                    console.log(response.data)
+                    const my_files = response.data
+                    const mp3 = []
+                    for(var i = 0; i < my_files.length; i++) {
+                        var file = my_files[i]
+                        var file_info = {}
+                        file_info["id"] = i+1
+                        file_info["file_name"] = file.file_name 
+                        file_info["url"] = file.file_path
+                        mp3.push(file_info)
+                    }
+                    this.mp3 = mp3
+                })
+                .catch(err => {
+                    if (err.response.data.status == 'ACCESS_TOKEN_EXPIRED') {
+                        console.log('token切れ')
+                        this.refresh_token()
+                        .then(result => {
+                            console.log(result)
+                            this.get_myfile()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            this.store.let_login()
+                            this.$router.push('/login')
+                        })
+                    } else {
+                        console.log('それ以外')
+                        alert(err.response.data.status)
+                    }
+                })
+        }
     }
 }
 </script>

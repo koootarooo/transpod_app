@@ -1,32 +1,35 @@
-from flask import Flask, render_template
-from dotenv import load_dotenv
-import os
-from api import file_translation_bp
-from methods import mail
+from flask import Flask, request, render_template, Response
+from setup import create_app
 
-load_dotenv()
-app = Flask(__name__, static_folder='../frontend/dist/static', template_folder='../frontend/dist')
+app = create_app()
+
+# blueprint
+from controllers.translate import file_translation_bp
+from controllers.signup import signup_bp
+from controllers.login import login_bp
+from controllers.refresh import refresh_bp
 app.register_blueprint(file_translation_bp)
-# メール設定
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_ADDRESS')
-app.config['MAIL_PASSWORD'] = os.environ.get('APP_PASSWORD')
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('GMAIL_ADDRESS')
+app.register_blueprint(signup_bp)
+app.register_blueprint(login_bp)
+app.register_blueprint(refresh_bp)
 
-mail.init_app(app)
-
+# ルート設定
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
     return render_template('index.html')
 
+@app.before_request
+def basic_authentication():
+    # print(vars(request))
+    if request.method.lower() == 'options':
+        print('preflight')
+        return Response()
+
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    response.headers.add('Access-Control-Allow-Headers', 'Authorization, X-XSRF-TOKEN, Content-Type')
+    response.headers.add('Access-Control-Allow-Headers', 'Authorization, X-XSRF-TOKEN, Content-Type, Origin, Accept')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 

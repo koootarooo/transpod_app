@@ -12,7 +12,7 @@
       <p>{{file_title}}</p>
       <p>{{file_size}}</p>
     </div>
-    <button class="translate_btn" @click="openModal()" v-if="!isLoading" v-bind:disabled="!isFile">翻訳する</button>
+    <button class="translate_btn" @click="translate()" v-if="!isLoading" v-bind:disabled="!isFile">翻訳する</button>
     <div class="loading_contents" v-if="isLoading">
       <div class="loading_message">
         翻訳中...<br>
@@ -27,22 +27,25 @@
         <span class="translate_again_btn">他のファイルを翻訳する</span>
       </div>
     </div>
-    <div class="overlay" v-if="showModal">
+    <!-- <div class="overlay" v-if="showModal">
       <div class="overlay_contents">
         <button class="closeButton" @click="closeModal()">close×</button>
         <p>メールアドレスを入力してください。<br>翻訳が完了したらメールでお知らせします。</p>
         <input type="text" class="emailForm" v-model="userEmail" />
         <button class="translate_btn" @click="closeModal(); translate()" v-bind:disabled="!rightEmail">翻訳する</button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import mixins from '../assets/mixins'
+import { useMessageStore } from '../stores/message'
 
 export default {
   name: 'TranslatePodcast',
+  mixins: [mixins],
   data() {
     return {
       file_data: "",
@@ -53,6 +56,12 @@ export default {
       isFile: false,
       showModal: false,
       userEmail: ""
+    }
+  },
+  setup() {
+    const store = useMessageStore()
+    return {
+      store
     }
   },
   computed: {
@@ -80,17 +89,36 @@ export default {
       this.isFile = true
     },
     translate() {
+      console.log('translate called')
       this.isLoading = true
-      var data = this.file_data
+      const data = this.file_data
+      const access_token = localStorage.getItem("access_token")
+      const options = {headers:{"Authorization":`Bearer ${access_token}`}}
 
-      // axios.get('http://127.0.0.1:5000/api/post').then(response => {console.log(response.data)})
       axios
-        .post('http://127.0.0.1:5000/api/post', data)
+        .post('http://127.0.0.1:5000/file', data, options)
         .then(response => {
           console.log(response.data)
+          this.reset()
         })
         .catch(err => {
-          alert(err)
+          if (err.response.data.status == 'ACCESS_TOKEN_EXPIRED') {
+            console.log('token切れ')
+            this.refresh_token()
+            .then(result => {
+              console.log(result)
+              this.translate()
+            })
+            .catch(err => {
+              console.log(err)
+              // エラーメッセージの変更
+              this.store.let_login()
+              this.$router.push('/login')
+            })
+          } else {
+            console.log('それ以外')
+            alert(err.response.data.status)
+          }
         })
     },
     reset() {

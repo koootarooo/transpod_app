@@ -15,6 +15,13 @@ sentencepiece = "*"
 pysbd = "*"
 gtts = "*"
 boto3 = "*"
+flask-login = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+werkzeug = "*"
+psycopg2-binary = "*"
+flask-jwt-extended = "*"
+pyjwt = "*"
 
 [dev-packages]
 
