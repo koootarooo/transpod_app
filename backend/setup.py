@@ -26,7 +26,7 @@ def create_app():
     print('create_app')
     
     load_dotenv()
-    app = Flask(__name__, static_folder='../frontend/dist/static', template_folder='../frontend/dist')
+    app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
     app.config.from_object(LocalConfig)
 
     # DB初期化
