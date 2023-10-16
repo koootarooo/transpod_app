@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, Response
 from setup import create_app
+import logging
 
 app = create_app()
 
@@ -21,7 +22,7 @@ def index(path):
 
 @app.before_request
 def basic_authentication():
-    # print(vars(request))
+    app.logger.info(vars(request))
     if request.method.lower() == 'options':
         print('preflight')
         return Response()

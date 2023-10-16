@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager, jwt_required
 from werkzeug.http import HTTP_STATUS_CODES
 from werkzeug.exceptions import HTTPException
 from jwt import ExpiredSignatureError
+import logging
 
 # from flask_migrate import Migrate
 import os
@@ -28,6 +29,7 @@ def create_app():
     load_dotenv()
     app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
     app.config.from_object(LocalConfig)
+    app.logger.info('create_app')
 
     # DB初期化
     db.init_app(app)
