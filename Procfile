@@ -1,1 +1,1 @@
-web: gunicorn -b 0.0.0.0:$PORT --pythonpath backend backend.main:app --access-logfile - --error-logfile - --log-level debug
+web: gunicorn -b 0.0.0.0:$PORT --pythonpath backend backend.main:app

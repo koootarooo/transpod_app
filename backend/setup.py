@@ -29,7 +29,27 @@ def create_app():
     load_dotenv()
     app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
     app.config.from_object(LocalConfig)
-    app.logger.info('create_app')
+
+    # ログ設定
+    # gunicorn_err_logger = logging.getLogger("gunicorn.error")
+    # gunicorn_err_logger.setLevel(logging.INFO)
+
+    # gunicorn_access_logger = logging.getLogger("gunicorn.access")
+    # gunicorn_access_logger.setLevel(logging.INFO)
+
+    # sh = logging.StreamHandler()
+    # sh.setLevel(logging.INFO)
+
+    # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # sh.setFormatter(formatter)
+
+    # gunicorn_err_logger.addHandler(sh)
+    # gunicorn_access_logger.addHandler(sh)
+
+    logging.basicConfig(level=logging.INFO)
+
+    app.logger.info('create_app info')
 
     # DB初期化
     db.init_app(app)
