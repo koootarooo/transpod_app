@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath backend backend.main:app -c "gunicorn_settings.py"
+web: gunicorn -b 0.0.0.0:$PORT --pythonpath backend backend.main:app -c "gunicorn_settings.py"
