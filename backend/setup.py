@@ -38,7 +38,7 @@ def create_app():
     # gunicorn_access_logger.setLevel(logging.INFO)
 
     # sh = logging.StreamHandler()
-    # sh.setLevel(logging.INFO)
+    # sh.setLevel(logging.WARNING)
 
     # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -47,7 +47,16 @@ def create_app():
     # gunicorn_err_logger.addHandler(sh)
     # gunicorn_access_logger.addHandler(sh)
 
-    logging.basicConfig(level=logging.INFO)
+    # logging.basicConfig(level=logging.INFO, format='{asctime} [{levelname:.4}] {message}', style='{')
+    logging.basicConfig(level=logging.WARNING)
+    logger = logging.getLogger("app.flask")
+    logger.setLevel(logging.WARNING)
+
+    # gunicorn
+    # gunicorn_access_logger = logging.getLogger("gunicorn.access_log")
+    # print(gunicorn_access_logger)
+    # fh = logging.FileHandler("test.log")
+    # gunicorn_access_logger.addHandler(fh)
 
     app.logger.info('create_app info')
 
