@@ -11,6 +11,7 @@ import logging
 
 # from flask_migrate import Migrate
 import os
+from os.path import join, dirname
 from datetime import datetime
 from methods import mail
 from config import LocalConfig, ProductionConfig
@@ -25,8 +26,11 @@ class ExtendedAPI(Api):
 
 def create_app():
     print('create_app')
-    
-    load_dotenv()
+
+    dotenv_path = join(dirname(__file__), '.env')
+    print(f'dotenv_path: {dotenv_path}')
+    load_dotenv(dotenv_path)
+
     app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
 
     # config settings
