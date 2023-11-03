@@ -35,9 +35,10 @@ def create_app():
         'pro': ProductionConfig
     }
     env = os.environ.get('FLASK_CONFIGURATION')
+    print(f'env: {env}')
     conf_mode = config_mode[env]
+    print(f'conf_mode: {conf_mode}')
     app.config.from_object(conf_mode)
-    print(conf_mode)
     print(app.config['ACCESS_ALLOW_ORIGIN'])
 
     # log settings
