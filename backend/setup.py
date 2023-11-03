@@ -13,7 +13,7 @@ import logging
 import os
 from datetime import datetime
 from methods import mail
-from config import LocalConfig
+from config import LocalConfig, ProductionConfig
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -28,35 +28,22 @@ def create_app():
     
     load_dotenv()
     app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
-    app.config.from_object(LocalConfig)
 
-    # ログ設定
-    # gunicorn_err_logger = logging.getLogger("gunicorn.error")
-    # gunicorn_err_logger.setLevel(logging.INFO)
+    # config settings
+    config_mode = {
+        'dev': LocalConfig,
+        'pro': ProductionConfig
+    }
+    env = os.environ.get('FLASK_CONFIGURATION')
+    conf_mode = config_mode[env]
+    app.config.from_object(conf_mode)
+    print(conf_mode)
+    print(app.config['ACCESS_ALLOW_ORIGIN'])
 
-    # gunicorn_access_logger = logging.getLogger("gunicorn.access")
-    # gunicorn_access_logger.setLevel(logging.INFO)
-
-    # sh = logging.StreamHandler()
-    # sh.setLevel(logging.WARNING)
-
-    # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-    # sh.setFormatter(formatter)
-
-    # gunicorn_err_logger.addHandler(sh)
-    # gunicorn_access_logger.addHandler(sh)
-
-    # logging.basicConfig(level=logging.INFO, format='{asctime} [{levelname:.4}] {message}', style='{')
+    # log settings
     logging.basicConfig(level=logging.WARNING)
     logger = logging.getLogger("app.flask")
     logger.setLevel(logging.WARNING)
-
-    # gunicorn
-    # gunicorn_access_logger = logging.getLogger("gunicorn.access_log")
-    # print(gunicorn_access_logger)
-    # fh = logging.FileHandler("test.log")
-    # gunicorn_access_logger.addHandler(fh)
 
     app.logger.info('create_app info')
 

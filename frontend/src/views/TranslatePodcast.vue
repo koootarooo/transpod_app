@@ -70,6 +70,9 @@ export default {
       return right_pattern.test(this.userEmail)
     }
   },
+  mounted: function() {
+    console.log(process.env.VUE_APP_TEST)
+  },
   methods: {
     dragEnter() {
       this.isEnter = true;
@@ -94,9 +97,12 @@ export default {
       const data = this.file_data
       const access_token = localStorage.getItem("access_token")
       const options = {headers:{"Authorization":`Bearer ${access_token}`}}
+      const base_url = process.env.VUE_APP_API_BASE_URL
+      const request_url = `${base_url}file`
+      console.log(request_url)
 
       axios
-        .post('http://127.0.0.1:5000/file', data, options)
+        .post(request_url, data, options)
         .then(response => {
           console.log(response.data)
           this.reset()

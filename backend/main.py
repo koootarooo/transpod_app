@@ -22,14 +22,14 @@ def index(path):
 
 @app.before_request
 def basic_authentication():
-    app.logger.info(vars(request))
     if request.method.lower() == 'options':
         print('preflight')
         return Response()
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    ORIGIN = app.config['ACCESS_ALLOW_ORIGIN']
+    response.headers.add('Access-Control-Allow-Origin', f'{ORIGIN}')
     response.headers.add('Access-Control-Allow-Headers', 'Authorization, X-XSRF-TOKEN, Content-Type, Origin, Accept')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response

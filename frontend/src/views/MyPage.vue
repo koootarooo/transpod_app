@@ -44,11 +44,13 @@ export default {
     methods: {
         get_myfile() {
             console.log('get_myfile loaded')
+            const base_url = process.env.VUE_APP_API_BASE_URL
+            const request_url = `${base_url}file`
             const access_token = localStorage.getItem("access_token")
             const options = {headers:{"Authorization":`Bearer ${access_token}`}}
 
             axios
-                .get('http://127.0.0.1:5000/file', options)
+                .get(request_url, options)
                 .then(response => {
                     console.log(response.data)
                     const my_files = response.data
