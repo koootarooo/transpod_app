@@ -24,22 +24,20 @@ class BaseConfig:
 
 class LocalConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user=os.environ.get('POSTGRESQL_USER'),        
-                password=os.environ.get('POSTGRESQL_PASSWORD'),  
+                user=os.environ.get('POSTGRESQL_USER_LOCAL'),        
+                password=os.environ.get('POSTGRESQL_PASSWORD_LOCAL'),  
                 host="localhost",       
                 port="5432",            
                 dbname="transpod")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ACCESS_ALLOW_ORIGIN = 'http://localhost:8080'
-    # 'postgresql:///' + os.path.join(basedir, 'app.db')
 
 class ProductionConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user=os.environ.get('POSTGRESQL_USER'),        
-                password=os.environ.get('POSTGRESQL_PASSWORD'),  
-                host="localhost",       
-                port="5432",            
-                dbname="transpod")
+                user=os.environ.get('POSTGRESQL_USER_PRODUCITON'),        
+                password=os.environ.get('POSTGRESQL_PASSWORD_PRODUCITON'),  
+                host=os.environ.get('POSTGRESQL_HOST_PRODUCITON'),       
+                port=os.environ.get('POSTGRESQL_PORT_PRODUCITON'),            
+                dbname=os.environ.get('POSTGRESQL_DBNAME_PRODUCITON'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ACCESS_ALLOW_ORIGIN = 'https://transpod-c78d3a6a1c42.herokuapp.com/'
-    # 'postgresql:///' + os.path.join(basedir, 'app.db')
