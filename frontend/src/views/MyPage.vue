@@ -44,7 +44,7 @@ export default {
     methods: {
         get_myfile() {
             console.log('get_myfile loaded')
-            const base_url = process.env.VUE_APP_API_BASE_URL
+            const base_url = "https://transpod-c78d3a6a1c42.herokuapp.com/"  //process.env.VUE_APP_API_BASE_URL
             const request_url = `${base_url}file`
             const access_token = localStorage.getItem("access_token")
             const options = {headers:{"Authorization":`Bearer ${access_token}`}}

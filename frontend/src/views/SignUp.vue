@@ -53,7 +53,7 @@ export default {
             this.isUsed_password = this.inputValue_password ? true : false
         },
         create_account() {
-            const base_url = process.env.VUE_APP_API_BASE_URL
+            const base_url = "https://transpod-c78d3a6a1c42.herokuapp.com/"  //process.env.VUE_APP_API_BASE_URL
             const request_url = `${base_url}signup`
             const data = {
                 email: this.inputValue_mail,
